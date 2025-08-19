@@ -25,29 +25,19 @@ def get_db_connection():
 # Creating a task table 
 def init_db():
     conn = get_db_connection()
-    if not conn:
-        print("❌ Could not connect to database.")
-        return
-
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS tasks (
-                    id SERIAL PRIMARY KEY,
-                    description TEXT NOT NULL,
-                    priority VARCHAR(10) NOT NULL,
-                    category VARCHAR(10) NOT NULL,
-                    done BOOLEAN DEFAULT FALSE,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-        conn.commit()
-        print("✅ Tasks table initialized successfully")
-    except Exception as e:
-        print("❌ Error initializing database:", e)
-    finally:
-        conn.close()
-
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS tasks (
+            id SERIAL PRIMARY KEY,
+            description TEXT NOT NULL,
+            priority VARCHAR(10) NOT NULL,
+            category VARCHAR(10) NOT NULL,
+            done BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close() 
 
 # Implement CRUD Operations
 # 1: Add a task
